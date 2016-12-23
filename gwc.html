@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width,initial-scale=0.5,minimum-scale=0.5,maximum-scale=0.5,user-scalable=no" />
+		<script type="text/javascript">
+			document.getElementsByTagName("html")[0].style.fontSize=window.innerWidth/16+"px"
+			window.addEventListener("resize",function(){
+				document.getElementsByTagName("html")[0].style.fontSize=window.innerWidth/16+"px"
+			})	
+		</script>
+		<!--<link rel="stylesheet" type="text/css" href="css/prolist.css"/>-->
+		<link rel="stylesheet" type="text/css" href="../userModul/css/iconfont/iconfont.css"/>
+		
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		html,body{
+			width: 100%;
+			height: 100%;
+			font-size: 14px;
+			overflow: hidden;
+		}
+		i.iconfont{
+			color: #313131;
+			font-size: 0.7rem;
+		}
+		header{
+			width: 100%;
+			height: 2rem;
+			background: #ad1b1b;
+			text-align: center;
+			color: white;
+			line-height: 2rem;
+			font-size: 1rem;
+		}
+		footer{
+			width: 100%;
+			height: 2.5rem;
+			background: #484850;
+			text-align: center;
+			color: white;
+			font-size: 0.7rem;
+			display: flex;
+			flex-flow: row;
+		}
+		footer span{
+			flex: 1;
+			font-size: 0.7rem;
+			position: relative;
+		}
+		footer span i{
+			height: 50%;
+			display: block;
+			margin-top: 0.5rem;
+			color: white !important;											
+		}
+		footer span em{
+			height: 50%;
+			display: block;
+		}	
+		#box{
+			width: 100%;
+			height: 100%;
+			display: flex;
+			flex-flow: column;
+			
+		}
+		.splist {
+			width: 100%;
+			
+		    flex: 1;
+		    display: flex;
+		    flex-flow: column;
+			overflow: hidden;
+		}
+			.splist dl{
+				display: flex;
+			}
+			.splist dl dt{
+				width: 200px;
+				height: 200px;
+			}
+			.splist dl dd{
+				margin-left: 16px;
+			}
+			.splist dl dd p{
+				font-size: 0.7rem;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div id="box">
+			<header>购物车</header>
+			<div class="splist">
+				
+			</div>
+			<footer>
+					<span ><i class="iconfont home">&#xe644</i><em>首页</em></span>
+					<span ><i class="iconfont prolist">&#xe651</i><em>分类</em></span>
+					<span ><i class="iconfont gwc">&#xe61b</i><em>购物车</em><p id="carSum">0
+						
+					</p></span>
+					<span ><i class="iconfont">&#xe646</i><em>我的</em></span>
+					<span ><i class="iconfont">&#xe692</i><em>更多</em></span>
+			</footer>
+		</div>
+		<script src="js/jquery-1.11.3.js" type="text/javascript" charset="utf-8"></script>
+		 <script src="js/iscroll.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/zepto.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+		$(".home").on("click",function(){
+			window.location="home.html"
+		})
+		$(".prolist").on("click",function(){
+			window.location="prolist.html"
+		})
+			$.ajax({
+				
+				url:"http://datainfo.duapp.com/shopdata/getCar.php",
+				dataType:"jsonp",
+				data:{
+					userID:localStorage.getItem("name")
+				},
+				success:function(data){
+					console.log(data)
+					var str1=''
+					for(var i in data){
+						str1+='<dl>'
+						str1+='<dt><img dataid="'+data[i].goodsID+'" class="img" width="175" height="175" src="'+data[i].goodsListImg+'">'
+						str1+='<dd>'
+						str1+='<p>'+data[i].goodsName+'</p>'
+						str1+='<p>'+data[i].number+'</p>'
+						str1+='</dd>'
+						str1+='</dl>'
+					}
+					$(".splist").html(str1)
+				}
+			});
+		</script>
+	</body>
+</html>

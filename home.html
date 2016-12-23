@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width,initial-scale=0.5,minimum-scale=0.5,maximum-scale=0.5,user-scalable=no" />
+		<meta charset="UTF-8">
+		<title>首页</title>
+		<link rel="stylesheet" href="css/swiper.min.css" />
+		<script src="js/zepto.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/swiper.min.js"></script>
+		<script src="js/iscroll.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			document.getElementsByTagName("html")[0].style.fontSize=window.innerWidth/16+"px"
+			window.addEventListener("resize",function(){
+				document.getElementsByTagName("html")[0].style.fontSize=window.innerWidth/16+"px"
+			})	
+		</script>
+		<style type="text/css">
+			*{
+				padding: 0;
+				margin: 0;
+			}
+			html,body{
+				width: 100%;
+				height: 100%;
+				overflow: hidden;
+			}
+			#box{
+				width: 100%;
+				height: 100%;
+				overflow: hidden;
+				display: flex;
+				flex-flow: column;
+			}
+			header{
+				width: 100%;
+				height: 2.25rem;
+				background: #ad1b1b;
+				text-align: center;
+				line-height: 2.25rem;
+			}
+			footer{
+				width: 100%;
+				height: 2.25rem;
+				background: #484850;
+				text-align: center;
+				line-height: 2.25rem;
+				display: flex;
+			}
+			footer span{
+				display: block;
+				flex: 1;
+				color: #fff;
+			}
+			.content{
+				width: 100%;
+				flex: 1;
+				display: flex;
+				flex-flow: column;
+			}
+			.search{
+				width: 100%;
+				height: 2.25rem;
+				background: #52525a;
+			}
+			.search input{
+				width: 80%;
+				height: 1.5rem;
+				border-radius: 30px;
+				margin: 0.375rem 10%;
+				font-size: 0.8rem;
+				outline: none;
+			}
+			
+			.swiper-container,.swiper-wrapper,.swiper-slide{
+				width: 100%;
+				height: 6.25rem;
+			}
+			.swiper-wrapper img{
+				width: 100%;
+			}
+			.swiper-container .swiper-pagination-bullet{
+				background:#fff;
+				opacity: 1;
+			}
+			.swiper-container .swiper-pagination-bullet-active{
+				background:red;
+				opacity: 1;
+			}
+			.list{
+				width: 100%;
+				flex: 1;
+				overflow: hidden;
+			}
+			.splist dl{
+				display: flex;
+			}
+			.splist dl dt{
+				width: 200px;
+				height: 200px;
+			}
+			.splist dl dd{
+				margin-left: 16px;
+			}
+			.splist dl dd p{
+				font-size: 0.7rem;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="box">
+			<header>走秀网</header>
+			<div class="content">
+				<div class="search">
+					<input class="searchp" type="text" name="" id="" placeholder="请输入搜索内容" value="" />
+				</div>			
+				<div class="swiper-container">
+				    <div class="swiper-wrapper"></div>
+				    <div class="swiper-pagination"></div>   
+				</div>
+				<div class="list">
+					<div class="splist">
+						
+					</div>
+				</div>
+				
+			</div>
+			<footer>
+				<span >首页</span>
+				<span class="prolist">分类</span>
+				<span class="gwc">购物车</span>
+				<span class="login">我的</span>
+			</footer>
+			<script type="text/javascript">
+			var myscroll;
+			$(".login").on("click",function(){
+						window.location.href="login.html"
+					})
+				$("footer").load("footer.html",function(){
+					$(".car").on("click",function(){
+						window.location.href="gwc.html"
+					})
+				})
+				$(".prolist").on("click",function(){
+					window.location="prolist.html"
+				})
+				$(".gwc").on("click",function(){
+					window.location="gwc.html"
+				})
+					$(".searchp").on("change",function(){
+						var _val = $(".searchp").val()
+						setTimeout(function(){
+							$.ajax({
+								url:"http://datainfo.duapp.com/shopdata/selectGoodes.php",
+								dataType:"jsonp",
+								data:{
+									selectText:_val
+								},
+								success:function(data){
+									console.log(data)
+								}
+							});
+						},1000)
+				})
+				
+				$.ajax({
+				url:" http://datainfo.duapp.com/shopdata/getBanner.php",
+				dataType:"jsonp",
+				success:function(data){
+					var str=''
+					var mag=eval(data[0].goodsBenUrl)
+					
+					for(var i in mag){
+						
+						str+='<div class="swiper-slide"><img src="'+mag[i]+'"/></div>'
+					}
+					$(".swiper-wrapper").html(str)
+					new Swiper(".swiper-container",{
+						direction:"horizontal",
+						pagination: '.swiper-pagination',
+						loop:true,
+						autoplay : 3000,
+						 paginationClickable: true,
+						autoplayDisableOnInteraction : false
+					})
+				}
+			})
+				
+				$.ajax({
+					url:"http://datainfo.duapp.com/shopdata/getGoods.php",
+					dataType:"jsonp",
+					success:function(data){
+						var str1=''
+						for(var i in data){
+							str1+='<dl>'
+							str1+='<dt><img  class="sppic" width="175" height="175" src="'+data[i].goodsListImg+'">'
+							str1+='<dd>'
+							str1+='<p>'+data[i].goodsName+'</p>'
+							str1+='<input type="text" id="num" >'
+							str1+='<img dataid="'+data[i].goodsID+'" class="spbtn" src="img/gwc.jpg"/>'
+							str1+='</dd>'
+							str1+='</dl>'
+						}
+						$(".splist").append(str1)
+						$(".sppic").on("load",function(){
+							myscroll.refresh()
+						})
+					}
+				});
+				
+				myscroll= new IScroll(".list",{
+					click:true
+				})
+				
+				$(".splist").on("click",".spbtn",function(){
+					var spid=$(this).attr("dataid")
+					$.ajax({
+						
+						url:"http://datainfo.duapp.com/shopdata/updatecar.php",
+						data:{
+							userID:localStorage.getItem("name"),
+							goodsID:spid,
+							number:$("#num").val()
+						},
+						success:function(data){
+							if(data==1){
+								window,location.href="gwc.html"
+							}else{
+								alert("加入购物车失败")
+							}
+						}
+					})
+				})
+			</script>
+		</div>
+	</body>
+</html>

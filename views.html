@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<meta charset="UTF-8">
+		<title></title>
+		
+		<link rel="stylesheet" type="text/css" href="css/iconfont/iconfont.css"/>
+		<link rel="stylesheet" href="css/swiper.min.css">
+		<link rel="stylesheet" type="text/css" href="css/views.css"/>
+		
+	</head>
+	<body>
+		<div id="views_box">				
+			<header class="clearboth">
+				<button class="backspace"><i class="iconfont" id="backBtn">&#xe619;</i></button>
+				<h3>商品详情</h3>	
+			<button class="shoppingCart"><i class="iconfont">&#xe61b;</i></button>
+			</header>
+			<section>
+				<div class="swiper-container sw_box1">
+					<div class="swiper-wrapper" id="box">
+					
+					</div>
+					<!-- 如果需要分页器 -->
+	    			<div class="swiper-pagination"></div>
+				</div>
+				<div class="con">
+					
+				</div>
+			</section>
+			<footer>
+				<button class="gwc">加入购物车</button>
+			</footer>
+		</div>	
+	</body>
+	<script src="js/jquery-1.11.3.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/product.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/swiper.min.js"></script>
+	<script type="text/javascript">
+		$(".gwc").on("click",function(){
+					var spid=$(this).attr("dataid")
+					$.ajax({
+						
+						url:"http://datainfo.duapp.com/shopdata/updatecar.php",
+						data:{
+							userID:localStorage.getItem("name"),
+							goodsID:spid,
+							number:$("#num").val()
+						},
+						success:function(data){
+							if(data==1){
+								window,location.href="gwc.html"
+							}else{
+								alert("加入购物车失败")
+							}
+						}
+					})
+				})
+		$(".shoppingCart").on("click",function(){
+					window.location="gwc.html"
+				})	
+	</script>
+</html>
